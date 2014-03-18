@@ -51,7 +51,7 @@ class API(object):
 
     def __request(self, request_data):
         if request_data.sec:
-            self.full_uri = self.base_sec_uri
+            self.full_uri = self.base_sec_uri + request_data.uri
         else:
             self.full_uri = self.base_uri + request_data.uri
         self.method = self.method_table[request_data.method]
@@ -215,11 +215,11 @@ class API(object):
     UserManager API
     """
 
-    def add_user(self, userConfig, container=None):
-        return self.__request_top(request_data_func=self.usermanager.add_user, userConfig=userConfig, container=container)
+    def add_user(self, userConfig):
+        return self.__request_top(request_data_func=self.usermanager.add_user, userConfig=userConfig)
 
-    def del_user(self, userName, container=None):
-        return self.__request_top(request_data_func=self.usermanager.del_user, userName=userName, container=container)
+    def del_user(self, userName):
+        return self.__request_top(request_data_func=self.usermanager.del_user, userName=userName)
 
     """
     ContainerManager API

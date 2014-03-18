@@ -1,15 +1,23 @@
 #!/usr/bin/python
 """
 """
+import sys
+import pprint
 from API import *
 import time
+
 myodl = ODL(auth=HTTPBasicAuth('admin', 'admin'),
-            domain='localhost', port='8080')
+            domain='localhost', port='8080',sec_port='8443')
 api = API(odl=myodl)
 """
 test TopologyAPI
 """
-api.retrieve_the_topology()
+reponse=api.retrieve_the_topology()
+topo=reponse.text
+pp = pprint.PrettyPrinter(indent=4)
+#pp.pprint(topo)
+
+#sys.exit()
 api.retrieve_userLinks()
 link1 = {}
 # api.add_userLink()
@@ -59,9 +67,9 @@ userConfig1 = {
     'roles': ['Network-Admin']
 }
 
-# api.add_user(userConfig1)
-# time.sleep(3)
-# api.del_user('testdpf')
+api.add_user(userConfig1)
+time.sleep(30)
+api.del_user('testdpf')
 
 """
 ContainerManager API

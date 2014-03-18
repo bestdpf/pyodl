@@ -17,7 +17,7 @@ class UserManagerAPI(BasicAPI):
         self.headers = {'Content-type': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers, sec=self.sec)
 
-    def delete_user(self, userName):
+    def del_user(self, userName):
         self.uri = '/' + self.app + '/users/' + userName
         self.method = 'DELETE'
         self.data = None
