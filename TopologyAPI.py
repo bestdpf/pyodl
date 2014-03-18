@@ -1,7 +1,5 @@
-#!/usr/bin/python
 """
 """
-from ODL import *
 from RequestData import *
 from BasicAPI import *
 
@@ -26,7 +24,7 @@ class TopologyAPI(BasicAPI):
     def add_userLink(self,container,topologyUserLinkConfig):
         self.uri='/'+ self.app+'/' + container + '/userLink/' + topologyUserLinkConfig.name
         self.method='PUT'
-        self.data=json.dumps(topologyUserLinkConfig)
+        self.data=topologyUserLinkConfig
         self.headers={'Content-type':'application/'+self.format}
         return RequestData(uri=self.uri,method=self.method,data=self.data,headers=self.headers)
 

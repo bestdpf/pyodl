@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """
 """
 from RequestData import *
@@ -11,3 +10,4 @@ class BasicAPI(object):
         self.headers=None
         self.method=None
         self.format=format
+        self.sec=False
