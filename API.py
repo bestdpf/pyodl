@@ -57,8 +57,8 @@ class API(object):
         self.method = self.method_table[request_data.method]
         self.response = self.method(
             self.full_uri, auth=self.odl.auth, data=request_data.data, headers=request_data.headers)
-        print('req uri: {2} \n{0}\n{1}'.format(
-            self.response.status_code, self.response.text, self.full_uri))
+        print('req uri: {2} \n headers: {3}\n method: {4} \n body: {5}\n{0}\n{1}'.format(
+            self.response.status_code, self.response.text, self.full_uri, request_data.headers,request_data.method,request_data.data))
         return self.response
 
     def __request_top(self, request_data_func, **func_kwargs):
@@ -68,27 +68,23 @@ class API(object):
         return self.__request(self.request_data)
 
     """
-    def __request_top_with_config(self,request_data_func,other_parameter,container=None):
-        if container is None:
-            container=self.container
-        self.request_data=request_data_func(container,other_parameter)
-        return self.__request(self.request_data)
-    """
-
-    """
     Topology API
     """
 
     def retrieve_the_topology(self, container=None):
+        """
+        get the switches' edges, bidirected graph, 
+        but can't see the port number
+        """
         return self.__request_top(request_data_func=self.topology.retrieve_the_topology, container=container)
 
     def retrieve_userLinks(self, container=None):
         return self.__request_top(request_data_func=self.topology.retrieve_userLinks, container=container)
 
-    def add_userLink(self, container, topologyUserLinkConfig):
+    def add_userLink(self, topologyUserLinkConfig, container=None):
         return self.__request_top(request_data_func=self.topology.add_userLink, container=container, topologyUserLinkConfig=topologyUserLinkConfig)
 
-    def del_userLink(self, container, linkName):
+    def del_userLink(self, linkName, container=None):
         return self.__request_top(request_data_func=self.topology.del_userLink, container=container, linkName=linkName)
 
     """
@@ -107,23 +103,29 @@ class API(object):
     def del_flow_by_name(self, nodeId, flowName, nodeType='OF', container=None):
         return self.__request_top(request_data_func=self.flowprogrammer.del_flow_by_name, nodeId=nodeId, flowName=flowName, nodeType=nodeType, container=container)
 
-    def add_or_modify_flow_by_name(self, nodeId, flowName, flowConfig, nodeType='OF', container=None):
-        return self.__request_top(request_data_func=self.flowprogrammer.add_or_modify_flow_by_name, nodeId=nodeId, flowName=flowName, flowConfig=flowConfig, nodeType=nodeType, container=container)
+    def toggle_flow_by_name(self, nodeId, flowName, nodeType='OF', container=None):
+        """I don't konw whether it is to renew the flow???"""
+        return self.__request_top(request_data_func=self.flowprogrammer.toggle_flow_by_name, nodeId=nodeId, flowName=flowName, nodeType=nodeType, container=container)
+
+    def add_or_modify_flow(self, flowConfig, container=None):
+        return self.__request_top(request_data_func=self.flowprogrammer.add_or_modify_flow, flowConfig=flowConfig, container=container)
 
     """
     HostTracker API
     """
 
     def retrieve_host_by_address(self, networkAddress, container=None):
+        """" I can't see any host pre-built by mininet """
         return self.__request_top(request_data_func=self.hosttracker.retrieve_host_by_address, networkAddress=networkAddress, container=container)
 
-    def add_host(self, networkAddress, hostConfig, container=None):
-        return self.__request_top(request_data_func=self.hosttracker.add_host, networkAddress=networkAddress, hostConfig=hostConfig, container=container)
+    def add_host(self, hostConfig, container=None):
+        return self.__request_top(request_data_func=self.hosttracker.add_host, hostConfig=hostConfig, container=container)
 
     def del_host(self, networkAddress, container=None):
         return self.__request_top(request_data_func=self.hosttracker.del_host, networkAddress=networkAddress, container=container)
 
     def retrieve_active_hosts(self, container=None):
+        """ I can't track any host pre-built by mininet using this api """
         return self.__request_top(request_data_func=self.hosttracker.retrieve_active_hosts, container=container)
 
     def retrieve_inactive_hosts(self, container=None):
@@ -139,10 +141,10 @@ class API(object):
     def retrieve_static_route_by_name(self, route, container=None):
         return self.__request_top(request_data_func=self.staticroute.retrieve_static_route_by_name, route=route, container=container)
 
-    def add_static_route(self, route, staticRoute, container):
-        return self.__request_top(request_data_func=self.staticroute.add_static_route, route=route, staticRoute=staticRoute, container=container)
+    def add_static_route(self, staticRoute, container=None):
+        return self.__request_top(request_data_func=self.staticroute.add_static_route, staticRoute=staticRoute, container=container)
 
-    def del_static_route(self, route, container):
+    def del_static_route(self, route, container=None):
         return self.__request_top(request_data_func=self.staticroute.del_static_route, route=route, container=container)
 
     """
@@ -203,6 +205,11 @@ class API(object):
         return self.__request_top(request_data_func=self.switchmanager.del_node_property, nodeId=nodeId, propertyName=propertyName, nodeType=nodeType, container=container)
 
     def add_node_property(self, nodeId, propertyName, propertyValue, nodeType='OF', container=None):
+        """
+        API docs make something wrong here, 
+        we cannot add a differentpropetyName to nodes, 
+        this func's name should be modify_node_property.
+        """
         return self.__request_top(request_data_func=self.switchmanager.add_node_property, nodeId=nodeId, propertyName=propertyName, propertyValue=propertyValue, nodeType=nodeType, container=container)
 
     def del_node_connector_property(self, nodeId, nodeConnectorId, nodeType='OF', nodeConnectorType='OF', container=None):

@@ -15,7 +15,7 @@ class ConnectionManagerAPI(BasicAPI):
             self.uri = self.uri + '?controller=' + controllerIP
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def del_connection(self, connectionNodeId, connectionNodeType):
@@ -23,7 +23,7 @@ class ConnectionManagerAPI(BasicAPI):
             connectionNodeType + '/' + connectionNodeId
         self.method = 'DELETE'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def add_management_connection_with_node(self, nodeId, nodeIPAddress, serverPort, nodeType):
@@ -35,5 +35,5 @@ class ConnectionManagerAPI(BasicAPI):
                 '/address/' + nodeIPAddress + '/' + '/port/' + serverPort
         self.method = 'PUT'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)

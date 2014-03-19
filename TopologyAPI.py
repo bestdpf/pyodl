@@ -13,27 +13,29 @@ class TopologyAPI(BasicAPI):
         self.uri = '/' + self.app + '/' + container
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def retrieve_userLinks(self, container):
         self.uri = '/' + self.app + '/' + container + '/userLinks'
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def add_userLink(self, container, topologyUserLinkConfig):
         self.uri = '/' + self.app + '/' + container + \
-            '/userLink/' + topologyUserLinkConfig.name
+            '/userLink/' + topologyUserLinkConfig['name']
         self.method = 'PUT'
         self.data = topologyUserLinkConfig
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format,
+        'Content-type' : 'application/' +self.format
+        }
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def del_userLink(self, container, linkName):
         self.uri = '/' + self.app + '/' + container + '/userLink/' + linkName
         self.method = 'DELETE'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)

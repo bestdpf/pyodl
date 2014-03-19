@@ -13,7 +13,7 @@ class StatisticsAPI(BasicAPI):
         self.uri = '/' + self.app + '/' + container + '/' + elementType
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def retrieve_node_statistics(self, nodeId, nodeType, elementType, container):
@@ -21,5 +21,5 @@ class StatisticsAPI(BasicAPI):
             elementType + '/node/' + nodeType + '/' + nodeId
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)

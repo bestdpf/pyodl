@@ -13,26 +13,28 @@ class StaticRouteAPI(BasicAPI):
         self.uri = '/' + self.app + '/' + container + '/routes'
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def retrieve_static_route_by_name(self, route, container):
         self.uri = '/' + self.app + '/' + container + '/route/' + route
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
-    def add_static_route(self, route, staticRoute, container):
-        self.uri = '/' + self.app + '/' + container + '/route/' + route
+    def add_static_route(self, staticRoute, container):
+        self.uri = '/' + self.app + '/' + container + '/route/' + staticRoute['name']
         self.method = 'PUT'
         self.data = staticRoute
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format,
+        'Content-type' : 'application/' + self.format
+        }
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def del_static_route(self, route, container):
         self.uri = '/' + self.app + '/' + container + '/route/' + route
         self.method = 'DELETE'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)

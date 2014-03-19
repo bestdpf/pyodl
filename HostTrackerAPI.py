@@ -14,15 +14,17 @@ class HostTrackerAPI(BasicAPI):
             container + '/address/' + networkAddress
         self.methd = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
-    def add_host(self, networkAddress, hostConfig, container):
+    def add_host(self, hostConfig, container):
         self.uri = '/' + self.app + '/' + \
-            container + '/address/' + networkAddress
+            container + '/address/' + hostConfig['networkAddress']
         self.method = 'PUT'
         self.data = hostConfig
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format,
+        'Content-type': 'application/' +self.format
+        }
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def del_host(self, networkAddress, container):
@@ -30,19 +32,19 @@ class HostTrackerAPI(BasicAPI):
             container + '/address/' + networkAddress
         self.method = 'DELETE'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def retrieve_active_hosts(self, container):
         self.uri = '/' + self.app + '/' + container + '/hosts/active'
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
 
     def retrieve_inactive_hosts(self, container):
         self.uri = '/' + self.app + '/' + container + '/hosts/inactive'
         self.method = 'GET'
         self.data = None
-        self.headers = {'Content-type': 'application/' + self.format}
+        self.headers = {'Accept': 'application/' + self.format}
         return RequestData(uri=self.uri, method=self.method, data=self.data, headers=self.headers)
