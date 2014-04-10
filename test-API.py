@@ -215,7 +215,7 @@ def main(argv):
             print "Secure port = ", sport
     
     myodl = ODL(auth=HTTPBasicAuth(user, password),
-            domain='localhost', port='8080',sec_port='8443')
+            domain=domain, port=port,sec_port=sport)
     api = API(odl=myodl,format='json')
     test_Topology_all(api)
     test_FlowProgrammer_all(api)
