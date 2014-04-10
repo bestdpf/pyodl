@@ -18,36 +18,81 @@ password='admin'
 domain='localhost'
 port='8080'
 sport='8443'
-headers = ["Test Name", "Output"]
+headers = ["Test Name", "Output", "Comment"]
 
+
+def fillReport(statusCode, individualTest):
+    
+    if (statusCode == 200):
+        individualTest.append("Success")
+        individualTest.append("Got")
+    elif (statusCode == 201):
+        individualTest.append("Success")
+        individualTest.append("Added")
+    elif (statusCode == 204):
+        individualTest.append("Success")
+        individualTest.append("Deleted")
+    elif (statusCode == 400):
+        individualTest.append("Failed")
+        individualTest.append("Invalid Parameter or configuration")
+    elif (statusCode == 401):
+        individualTest.append("Failed")
+        individualTest.append("User not authorized to perform this operation")
+    elif (statusCode == 404):
+        individualTest.append("Failed")
+        individualTest.append("The Container or Resource was not found")
+    elif (statusCode == 406):
+        individualTest.append("Failed")
+        individualTest.append("Cannot operate on Default Container when other Containers are active")
+    elif (statusCode == 409):
+        individualTest.append("Failed")
+        individualTest.append("Failed to Add due to conflicting Name")
+    elif (statusCode == 500):
+        individualTest.append("Failed")
+        individualTest.append("Failed to Add")
+    elif (statusCode == 503):
+        individualTest.append("Failed")
+        individualTest.append("One or more of Controller services are unavailable")
+        
 
 def test_Topology_all(api, reportList):
     """
     test TopologyAPI
-    """  
+    """
+    """
+    Retrieve Topology
+    """
     individualTest=[]
     individualTest.append("Retreive Topology")
     response=api.retrieve_the_topology()
-    if (response.status_code==200):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
-        
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")        
+#     reportList.append(individualTest)
+#     print tabulate(reportList, headers, tablefmt="grid")   
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
-    print tabulate(reportList, headers, tablefmt="grid")   
+    print tabulate(reportList, headers, tablefmt="grid")
 
+    """
+    Retrieve UserLinks
+    """
     individualTest=[]
     response=api.retrieve_userLinks()
     individualTest.append("Retrieve UserLinks")
-    if (response.status_code==200):
-        print "success2"
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==200):
+#         print "success2"
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)    
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")   
 
-    
+    """
+    Add User Link
+    """
     #topologyUserLinkConfig
     individualTest=[]
     individualTest.append("Add User Link")
@@ -59,26 +104,33 @@ def test_Topology_all(api, reportList):
     'dstNodeConnector':'OF|2@OF|00:00:00:00:00:00:00:03'
     }
     response = api.add_userLink(topologyUserLinkConfig=link1)
-    if (response.status_code==201):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==201):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
     
     time.sleep(1)
 #     response = api.retrieve_userLinks()
 #     time.sleep(1)
+
+    """
+    Delete User Link
+    """
     print('deleting link link1')
     individualTest=[]
     individualTest.append("Delete User Link")
     response = api.del_userLink(linkName='link1')
-    if (response.status_code==204):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==204):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
+
 
 def test_FlowProgrammer_all(api, reportList):
     """
@@ -87,30 +139,33 @@ def test_FlowProgrammer_all(api, reportList):
     individualTest=[]
     individualTest.append("Retrieve Flows")
     response = api.retrieve_flows()
-    if (response.status_code==200):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
     
     individualTest=[]
     individualTest.append("Retrieve Node Flow by ID")
     response = api.retrieve_node_flows(nodeId='00:00:00:00:00:00:00:01')
-    if (response.status_code==200):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
     
     individualTest=[]
     individualTest.append("Retrieve Flow by Name and ID")
     response = api.retrieve_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='NORMAL')
-    if (response.status_code==200):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
     
@@ -130,12 +185,13 @@ def test_FlowProgrammer_all(api, reportList):
     'DROP'
     ]
     }
-    print('add a flow')
+    #print('add a flow')
     response = api.add_or_modify_flow(flowConfig=flow1)
-    if (response.status_code==200):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
     
@@ -144,12 +200,13 @@ def test_FlowProgrammer_all(api, reportList):
     
     individualTest=[]
     individualTest.append("Toggle a Flow Configuration")
-    print('toggle a flow')
+    #print('toggle a flow')
     response = api.toggle_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='flow1',nodeType='OF')
-    if (response.status_code==200):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
     
@@ -157,25 +214,57 @@ def test_FlowProgrammer_all(api, reportList):
     
     individualTest=[]
     individualTest.append("Delete a Flow")
-    print('del a flow')
+    #print('del a flow')
     response = api.del_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='flow1',nodeType='OF')
-    if (response.status_code==200):
-        individualTest.append("Success")
-    else:
-        individualTest.append("Failed")
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
     
     response = api.retrieve_node_flows(nodeId='00:00:00:00:00:00:00:01')
 
-def test_HostTracker_all(api):
+def test_HostTracker_all(api, reportList):
     """
     test HostTrackerAPI
     """
-    print('HostTrackerAPI')
-    api.retrieve_active_hosts()
-    api.retrieve_inactive_hosts()
-    api.retrieve_host_by_address(networkAddress='10.0.0.1')
+    #print('HostTrackerAPI')
+    individualTest=[]
+    individualTest.append("Retrieve all Active Hosts")
+    response = api.retrieve_active_hosts()
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    individualTest=[]
+    individualTest.append("Retrieve all Inactive Hosts")
+    response = api.retrieve_inactive_hosts()
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    individualTest=[]
+    individualTest.append("Retrieve Host by IP Address")
+    response = api.retrieve_host_by_address(networkAddress='10.0.0.1')
+#     if (response.status_code==200):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    
     #hostConfig
     host1={
     'dataLayerAddress' : '00:00:00:00:00:00:10:01',
@@ -187,32 +276,80 @@ def test_HostTracker_all(api):
     'networkAddress' : '10.0.1.1'
     }
     #I may add a nodeConnector to a switch, and then to add a host1
-    """
-    print('add a host')
-    api.add_host(hostConfig=host1)
+    #print('add a host')
+    individualTest=[]
+    individualTest.append("Add a Host")
+    response = api.add_host(hostConfig=host1)
+#     if (response.status_code==201):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
     time.sleep(15)
-    print('del a host')
-    api.del_host(networkAddress='10.0.1.1')
-    sys.exit()
-    """
+    
+    
+    #print('del a host')
+    individualTest=[]
+    individualTest.append("Delete a Host by IP Address")
+    response = api.del_host(networkAddress='10.0.1.1')
+#     if (response.status_code==204):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    #sys.exit()
+    
 
-def test_StaticRoute_all(api):
+def test_StaticRoute_all(api, reportList):
     """
     test StaticRouteAPI
     """
-    api.retrieve_all_static_routes()
+    individualTest=[]
+    individualTest.append("Retrieve all Static Routes")
+    response = api.retrieve_all_static_routes()
+#     if (response.status_code==204):
+#         individualTest.append("Success")
+#     else:
+#         individualTest.append("Failed")
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
     route1={
     'name': 'route1',
     'prefix' : '10.0.1.0/24',
     'nextHop' : '10.0.0.1'
     }
-    api.retrieve_static_route_by_name(route='test-route1')
+    
+    individualTest=[]
+    individualTest.append("Retrieve Static Route by Name")
+    response = api.retrieve_static_route_by_name(route='test-route1')
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
     print('add route1')
+    individualTest=[]
+    individualTest.append("Add Static Route")
     api.add_static_route(staticRoute=route1)
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
     time.sleep(1)
+    
+    individualTest=[]
+    individualTest.append("Delete Static Route")
     api.del_static_route(route='route1')
+    fillReport(response.status_code, individualTest)
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
 
-def test_Statistics_all(api):
+def test_Statistics_all(api, reportList):
     """
     test StatisticsAPI
     """
@@ -220,13 +357,13 @@ def test_Statistics_all(api):
     api.retrieve_all_statistics_port()
     api.retrieve_all_statistics_table()
 
-def test_Subnets_all(api):
+def test_Subnets_all(api, reportList):
     """
     test SubnetsAPI Not Tested Now!!!
     """
     api.retrieve_all_subnets()
 
-def test_SwitchManager_all(api):    
+def test_SwitchManager_all(api, reportList):    
     """
     test SwitchManagerAPI
     """
@@ -239,7 +376,7 @@ def test_SwitchManager_all(api):
     api.del_node_property(nodeId='00:00:00:00:00:00:00:01',propertyName='description')
 
 
-def test_UserManager_all(api):
+def test_UserManager_all(api, reportList):
     """
     test UserManagerAPI
     """
@@ -256,14 +393,14 @@ def test_UserManager_all(api):
     api.del_user('testdpf')
     """
 
-def test_ContainerManager_all(api):
+def test_ContainerManager_all(api, reportList):
     """
     ContainerManager API
     """
     api.retrieve_all_containers()
     api.retrieve_container_config()  # can't get 'default'
 
-def test_ConnectionManager_all(api):
+def test_ConnectionManager_all(api, reportList):
     """
     ConnectionManager API
     """
@@ -312,14 +449,14 @@ def main(argv):
     reportList=[]
     test_Topology_all(api, reportList)
     test_FlowProgrammer_all(api, reportList)
-#     test_HostTracker_all(api)
-#     test_StaticRoute_all(api)
-#     test_Statistics_all(api)
-#     test_ConnectionManager_all(api)
-#     test_ContainerManager_all(api)
-#     test_SwitchManager_all(api)
-#     test_Subnets_all(api)
-#     test_UserManager_all(api)
+    test_HostTracker_all(api, reportList)
+    test_StaticRoute_all(api, reportList)
+#     test_Statistics_all(api, reportList)
+#     test_ConnectionManager_all(api, reportList)
+#     test_ContainerManager_all(api, reportList)
+#     test_SwitchManager_all(api, reportList)
+#     test_Subnets_all(api, reportList)
+#     test_UserManager_all(api, reportList)
     print tabulate(reportList, headers, tablefmt="grid") 
     print 'Completed Testing'
 
