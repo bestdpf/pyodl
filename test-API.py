@@ -8,6 +8,7 @@ import pprint
 from API import *
 import time
 from unittest.test import test_break
+from tabulate import tabulate
 
 """
 Globals
@@ -17,19 +18,39 @@ password='admin'
 domain='localhost'
 port='8080'
 sport='8443'
+headers = ["Test Name", "Output"]
 
 
-def test_Topology_all(api):
+def test_Topology_all(api, reportList):
     """
     test TopologyAPI
-    """
-    reponse=api.retrieve_the_topology()
-    topo=reponse.text
-    pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(topo)
+    """  
+    individualTest=[]
+    individualTest.append("Retreive Topology")
+    response=api.retrieve_the_topology()
+    if (response.status_code==200):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+        
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")   
+
+    individualTest=[]
+    response=api.retrieve_userLinks()
+    individualTest.append("Retrieve UserLinks")
+    if (response.status_code==200):
+        print "success2"
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")   
+
     
-    api.retrieve_userLinks()
     #topologyUserLinkConfig
+    individualTest=[]
+    individualTest.append("Add User Link")
     print('adding link named link1')
     link1 = {
     'status':'Success',
@@ -37,20 +58,64 @@ def test_Topology_all(api):
     'srcNodeConnector':'OF|2@OF|00:00:00:00:00:00:00:01',
     'dstNodeConnector':'OF|2@OF|00:00:00:00:00:00:00:03'
     }
-    api.add_userLink(topologyUserLinkConfig=link1)
+    response = api.add_userLink(topologyUserLinkConfig=link1)
+    if (response.status_code==201):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
     time.sleep(1)
-    api.retrieve_userLinks()
-    time.sleep(1)
+#     response = api.retrieve_userLinks()
+#     time.sleep(1)
     print('deleting link link1')
-    api.del_userLink(linkName='link1')
+    individualTest=[]
+    individualTest.append("Delete User Link")
+    response = api.del_userLink(linkName='link1')
+    if (response.status_code==204):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
 
-def test_FlowProgrammer_all(api):
+def test_FlowProgrammer_all(api, reportList):
     """
     test FlowProgrammerAPI
     """
-    api.retrieve_flows()
-    api.retrieve_node_flows(nodeId='00:00:00:00:00:00:00:01')
-    api.retrieve_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='NORMAL')
+    individualTest=[]
+    individualTest.append("Retrieve Flows")
+    response = api.retrieve_flows()
+    if (response.status_code==200):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    individualTest=[]
+    individualTest.append("Retrieve Node Flow by ID")
+    response = api.retrieve_node_flows(nodeId='00:00:00:00:00:00:00:01')
+    if (response.status_code==200):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    individualTest=[]
+    individualTest.append("Retrieve Flow by Name and ID")
+    response = api.retrieve_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='NORMAL')
+    if (response.status_code==200):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    individualTest=[]
+    individualTest.append("Add a Flow")
     flow1={
     'installInHw' : 'true',
     'name' : 'flow1',
@@ -66,15 +131,42 @@ def test_FlowProgrammer_all(api):
     ]
     }
     print('add a flow')
-    api.add_or_modify_flow(flowConfig=flow1)
+    response = api.add_or_modify_flow(flowConfig=flow1)
+    if (response.status_code==200):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
     time.sleep(1)
     api.retrieve_node_flows(nodeId='00:00:00:00:00:00:00:01')
+    
+    individualTest=[]
+    individualTest.append("Toggle a Flow Configuration")
     print('toggle a flow')
-    api.toggle_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='flow1',nodeType='OF')
+    response = api.toggle_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='flow1',nodeType='OF')
+    if (response.status_code==200):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
     time.sleep(1)
+    
+    individualTest=[]
+    individualTest.append("Delete a Flow")
     print('del a flow')
-    api.del_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='flow1',nodeType='OF')
-    api.retrieve_node_flows(nodeId='00:00:00:00:00:00:00:01')
+    response = api.del_flow_by_name(nodeId='00:00:00:00:00:00:00:01',flowName='flow1',nodeType='OF')
+    if (response.status_code==200):
+        individualTest.append("Success")
+    else:
+        individualTest.append("Failed")
+    reportList.append(individualTest)
+    print tabulate(reportList, headers, tablefmt="grid")
+    
+    response = api.retrieve_node_flows(nodeId='00:00:00:00:00:00:00:01')
 
 def test_HostTracker_all(api):
     """
@@ -217,16 +309,18 @@ def main(argv):
     myodl = ODL(auth=HTTPBasicAuth(user, password),
             domain=domain, port=port,sec_port=sport)
     api = API(odl=myodl,format='json')
-    test_Topology_all(api)
-    test_FlowProgrammer_all(api)
-    test_HostTracker_all(api)
-    test_StaticRoute_all(api)
-    test_Statistics_all(api)
-    test_ConnectionManager_all(api)
-    test_ContainerManager_all(api)
-    test_SwitchManager_all(api)
-    test_Subnets_all(api)
-    test_UserManager_all(api)
+    reportList=[]
+    test_Topology_all(api, reportList)
+    test_FlowProgrammer_all(api, reportList)
+#     test_HostTracker_all(api)
+#     test_StaticRoute_all(api)
+#     test_Statistics_all(api)
+#     test_ConnectionManager_all(api)
+#     test_ContainerManager_all(api)
+#     test_SwitchManager_all(api)
+#     test_Subnets_all(api)
+#     test_UserManager_all(api)
+    print tabulate(reportList, headers, tablefmt="grid") 
     print 'Completed Testing'
 
 if __name__ == '__main__':
