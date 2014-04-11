@@ -21,7 +21,7 @@ sport='8443'
 headers = ["Test Name", "Output", "Comment"]
 
 
-def fillReport(statusCode, individualTest):
+def fill_report(statusCode, individualTest):
     
     if (statusCode == 200):
         individualTest.append("Success")
