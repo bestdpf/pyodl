@@ -2,18 +2,24 @@
 This is a python interface of OpenDaylight Northband REST API. It contains most of APIs except OpenStack's OpenDaylight management APIs.
 
 2. Dependcies
-This software uses requests for HTTP connection. You can install it using pip tools just like:
+This software uses requests for HTTP connection. It uses tabulate for printing the report of the API tests in an orderly fashion.
+You can install it using pip tools just like:
 pip install requests
+pip install tabulate
 
 3. Usage
 test-API.py is a sample of how to use this software.
+Use it as follows :
+./test-API.py -u <username> -p <password> -d <OpenDaylight Server URL> -P <port number> -s <Secure port number>
 
 4. Bugs and Problems
 This software still needs much test.
 
 5. To Do
-High-level APIs based on REST APIs is under developing.
-OpenStack's OpenDaylight management will be added soon.
+- Make the compliant with PEP8 coding guidelines
+- Restructuring the code : Pythonize it :)
+- High-level APIs based on REST APIs is under developing.
+- OpenStack's OpenDaylight management will be added soon.
 
 6. License
 This software is under GPLv2. Read License for details.
