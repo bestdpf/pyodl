@@ -60,7 +60,7 @@ def fill_report(statusCode, individualTest):
 
 
 def prepareReport(statusCode, reportList, individualTest):
-    fillReport(statusCode, individualTest)
+    fill_report(statusCode, individualTest)
     reportList.append(individualTest)
     print tabulate(reportList, headers, tablefmt="grid")
 
